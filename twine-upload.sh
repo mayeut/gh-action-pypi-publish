@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 
-if [[
+if [[ ${INPUT_DRY_RUN,,} != "true" ]] && [[
     "$INPUT_USER" == "__token__" &&
     ! "$INPUT_PASSWORD" =~ ^pypi-
   ]]
@@ -33,6 +33,10 @@ fi
 
 if [[ ${INPUT_VERIFY_METADATA,,} != "false" ]] ; then
     twine check ${INPUT_PACKAGES_DIR%%/}/*
+fi
+
+if [[ ${INPUT_DRY_RUN,,} != "false" ]] ; then
+    exit 0
 fi
 
 TWINE_EXTRA_ARGS=
